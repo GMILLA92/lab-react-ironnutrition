@@ -9,20 +9,26 @@ import Search from './components/Search';
 function App() {
 
   const [foodsCurrent, setFood] = useState(foods)
+  const [filterFoods, setFilterFoods] = useState(foods)
+  
 
   const deleteHandler = (deleteDataName) => {
     const newArray = foodsCurrent.filter(food => {
       return food.name !== deleteDataName
     })
+
     setFood(newArray)
+    setFilterFoods(newArray)
   }
-  const foodContentArray = foodsCurrent.map((food) => (
+
+  const foodContentArray = filterFoods.map((food) => (
     <FoodBox
       name= {food.name}
       calories= {food.calories}
       image= {food.image}
       date = {food.date}
       onDeleteData={deleteHandler}
+     
     />
   ))
 
@@ -40,11 +46,20 @@ function App() {
 
   const searchHandler = (searchStringData) => {
     console.log(searchStringData)
-    const rsearchStringData = foods.filter((food) => {
+    const rsearchStringData = foodsCurrent.filter((food) => {
       return food.name.toLowerCase().includes(searchStringData.toLowerCase())
     })
     
-    setFood(rsearchStringData)
+    setFilterFoods(rsearchStringData)
+  }
+
+  const changeHandler = () =>{
+    return ( 
+    <div>
+    <Search onSearchData={searchHandler}/>
+    {foodContentArray}
+    </div>
+    )
   }
 
   return (
@@ -65,7 +80,7 @@ function App() {
           servings: 1
         }
       } /> */}
-    <AddFoodForm onFoodData = {foodDataHandler}/>
+    <AddFoodForm onFoodData = {foodDataHandler}  onChangeData={changeHandler} />
     <Search onSearchData={searchHandler}/>
     {foodContentArray}
     </div>
