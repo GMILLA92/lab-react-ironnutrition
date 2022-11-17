@@ -10,15 +10,22 @@ function App() {
 
   const [foodsCurrent, setFood] = useState(foods)
   const [filterFoods, setFilterFoods] = useState(foods)
-  
+  const [showMessage, setMessage] = useState(false)
 
   const deleteHandler = (deleteDataName) => {
     const newArray = foodsCurrent.filter(food => {
       return food.name !== deleteDataName
     })
+    if (newArray.length === 0){
+      setMessage(true)
+      setFood(newArray)
+      setFilterFoods(newArray)
+    } else{
+      setFood(newArray)
+      setFilterFoods(newArray)
+    }
+   
 
-    setFood(newArray)
-    setFilterFoods(newArray)
   }
 
   const foodContentArray = filterFoods.map((food) => (
@@ -53,14 +60,6 @@ function App() {
     setFilterFoods(rsearchStringData)
   }
 
-  const changeHandler = () =>{
-    return ( 
-    <div>
-    <Search onSearchData={searchHandler}/>
-    {foodContentArray}
-    </div>
-    )
-  }
 
   return (
     < div className="App" >
@@ -80,9 +79,10 @@ function App() {
           servings: 1
         }
       } /> */}
-    <AddFoodForm onFoodData = {foodDataHandler}  onChangeData={changeHandler} />
+    <AddFoodForm onFoodData = {foodDataHandler}  />
     <Search onSearchData={searchHandler}/>
     {foodContentArray}
+    {showMessage ? <h1>No elements! </h1> : ''}
     </div>
 
   );
